@@ -10,7 +10,7 @@ Copy the appropriate webview2.cp...-win_....pyd file into the DLLs folder of you
 
 ## Examples
 
-*The [examples](examples/) folder also contains demos for using python-webview2 with wxWidgets or with the plain WinAPI and ctypes.*
+*The [examples](examples/) folder also contains demos for using python-webview2 with [wxWidgets](https://pypi.org/project/wxPython/) or with the plain [WinAPI](https://en.wikipedia.org/wiki/Windows_API) and [ctypes](https://en.wikipedia.org/wiki/Windows_API).*
 
 ### 1.) Binding: Call from JS into Python, return result to JS
 ```python
@@ -72,7 +72,7 @@ webview.run()
 ```
 ![Map Demo](screenshots/demo_map_standalone.png)
 
-### 3.) Minimal Map Viewer Demo (PyQt5, PyQt6 or PySide6)
+### 3.) Minimal Map Viewer Demo ([PyQt5](https://pypi.org/project/PyQt5/), [PyQt6](https://pypi.org/project/PyQt6/) or [PySide6](https://pypi.org/project/PySide6/))
 ```python
 import os
 import webview2
