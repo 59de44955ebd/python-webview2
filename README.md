@@ -10,6 +10,8 @@ Copy the appropriate webview2.cp...-win_....pyd file into the DLLs folder of you
 
 ## Examples
 
+*The [examples](examples/) folder also contains demos for using python-webview2 with wxWidgets or with the plain WinAPI and ctypes.*
+
 ### 1.) Binding: Call from JS into Python, return result to JS
 ```python
 import webview2
@@ -116,8 +118,6 @@ if __name__ == "__main__":
     main = Main()
     main.run()
 ```
-
-*The [examples](examples/) folder contains some more demos for using python-webview2 with wxWidgets or plain WinAPI/ctypes.*
 
 ## API
 
