@@ -1,6 +1,6 @@
 # python-webview2
 
-python-webview2 is a WebView implementation for Python 3.x in Windows 10/11 based on the MS Edge WebView2 runtime (i.e. Chrome). It's a lightweight (about 200 KB) alternative for (outdated) [cefpython3](https://pypi.org/project/cefpython3/).
+python-webview2 is a WebView implementation for Python 3.x in Windows 10/11 based on the [MS Edge WebView2 runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2) (i.e. Chrome). It's a lightweight (about 200 KB) alternative for (outdated) [cefpython3](https://pypi.org/project/cefpython3/), since the runtime is preinstalled in any Windows 11 and fully updated Windows 10 system (and can be installed manually in older Windows 10 systems).
 
 python-webview2 is implemented as binary Python extension module (.pyd) and based on this [webview library](https://github.com/webview/webview).
 
