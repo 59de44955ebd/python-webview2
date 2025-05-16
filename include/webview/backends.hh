@@ -28,8 +28,8 @@
 
 #if defined(__cplusplus) && !defined(WEBVIEW_HEADER)
 
-#include "detail/backends/cocoa_webkit.hh"
-#include "detail/backends/gtk_webkitgtk.hh"
+//#include "detail/backends/cocoa_webkit.hh"
+//#include "detail/backends/gtk_webkitgtk.hh"
 #include "detail/backends/win32_edge.hh"
 
 namespace webview {

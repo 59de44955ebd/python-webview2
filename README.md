@@ -2,7 +2,7 @@
 
 python-webview2 is a WebView implementation for Python 3.x in Windows 10/11 based on the [MS Edge WebView2 runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2) (i.e. Chrome/Chromium). It's a lightweight (about 200 KB) alternative for (outdated) [cefpython3](https://pypi.org/project/cefpython3/). As far as I know the Edge runtime is preinstalled in any Windows 11 and fully updated Windows 10 system, and can be installed manually in older Windows 10 systems.
 
-python-webview2 is implemented as binary Python extension module (.pyd) and based on this [webview library](https://github.com/webview/webview) written in C/C++.
+python-webview2 is implemented as binary Python extension module (.pyd) and uses code from this [webview library](https://github.com/webview/webview).
 
 ## Installation
 
@@ -122,11 +122,12 @@ if __name__ == "__main__":
 ## API
 
 ```
-webview2.WebView(autosize=False, debug=False, height=240, icon=None, title=None, url=None, width=320, window=None)
+webview2.WebView(autosize=False, bgcolor=0xFFFFFF, debug=False, height=240, icon=None, title=None, url=None, width=320, window=None)
 ```
 Constructor, create a WebView instance, either as standalone window or embedded into an existing window.  
 Parameters:
 * autosize (bool) - Embedded mode only: If True, WebView resizes automatically to the parent window's client rect
+* bgcolor (int) - Webview's default background color as COLORREF, i.e. in BGR byte order
 * debug (bool) - If True, the DevTools (Console etc.) are available (F12)  
 * height (int) - Initial height of the WebView
 * icon (str) - Standalone mode only: path to .ico file used as window icon
@@ -188,9 +189,9 @@ Parameters:
 * url (str)
 
 ```
-<instance>.run()
+<instance>.run(hwnd=None, haccel=None)
 ```
-Run the main loop until it's terminated.  
+Run the main loop until it's terminated. 
 
 ```
 <instance>.set_focus()

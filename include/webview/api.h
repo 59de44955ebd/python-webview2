@@ -30,6 +30,8 @@
 #include "macros.h"
 #include "types.h"
 
+#include <Windows.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,7 +59,7 @@ extern "C" {
  * @retval WEBVIEW_ERROR_MISSING_DEPENDENCY
  *         May be returned if WebView2 is unavailable on Windows.
  */
-WEBVIEW_API webview_t webview_create(int debug, void *window);
+WEBVIEW_API webview_t webview_create(int debug, void *window, COLORREF cr);
 
 /**
  * Destroys a webview instance and closes the native window.
@@ -71,7 +73,7 @@ WEBVIEW_API webview_error_t webview_destroy(webview_t w);
  *
  * @param w The webview instance.
  */
-WEBVIEW_API webview_error_t webview_run(webview_t w);
+WEBVIEW_API webview_error_t webview_run(webview_t w, HWND hWnd, HACCEL hacc);
 
 /**
  * Stops the main loop. It is safe to call this function from another other

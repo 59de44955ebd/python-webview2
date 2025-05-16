@@ -17,16 +17,15 @@ class Main(QMainWindow):
             autosize = True,
             icon = os.path.join(APP_DIR, "resources", "main.ico"),
             title = "WebView2 Map Demo (PyQt/PySide)",
-            url = "https://59de44955ebd.github.io/map/",
+            url = "https://59de44955ebd.github.io/map/?nofullscreen",
             debug = True,
         )
-        self.webview.js_bind("__on_fs__", lambda id, args: self.webview.set_fullscreen(eval(args)[0]))
-        self.webview.js_eval("""
-        document.addEventListener(
-            'fullscreenchange',
-            () => __on_fs__(+!map._isFullscreen)
-        )
-        """)
+        self.is_fullscreen = False
+        def toggle_fullscreen(id, args):
+            self.is_fullscreen = not self.is_fullscreen
+            self.webview.set_fullscreen(self.is_fullscreen)
+        self.webview.js_bind("__on_fs__", toggle_fullscreen)
+        self.webview.js_eval("window.addEventListener('keydown', (e) => {if (e.keyCode==122) __on_fs__();});")
         self.resize(1024, 768)
         self.show()
 

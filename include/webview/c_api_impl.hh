@@ -88,12 +88,12 @@ inline webview *cast_to_webview(void *w) {
 } // namespace detail
 } // namespace webview
 
-WEBVIEW_API webview_t webview_create(int debug, void *wnd) {
+WEBVIEW_API webview_t webview_create(int debug, void *wnd, COLORREF cr) {
   using namespace webview::detail;
   webview::webview *w{};
   auto err = api_filter(
       [=]() -> webview::result<webview::webview *> {
-        return new webview::webview{static_cast<bool>(debug), wnd};
+        return new webview::webview{static_cast<bool>(debug), wnd, cr};
       },
       [&](webview::webview *w_) { w = w_; });
   if (err == WEBVIEW_ERROR_OK) {
@@ -110,9 +110,9 @@ WEBVIEW_API webview_error_t webview_destroy(webview_t w) {
   });
 }
 
-WEBVIEW_API webview_error_t webview_run(webview_t w) {
+WEBVIEW_API webview_error_t webview_run(webview_t w, HWND hWnd, HACCEL hacc) {
   using namespace webview::detail;
-  return api_filter([=] { return cast_to_webview(w)->run(); });
+  return api_filter([=] { return cast_to_webview(w)->run(hWnd, hacc); });
 }
 
 WEBVIEW_API webview_error_t webview_terminate(webview_t w) {

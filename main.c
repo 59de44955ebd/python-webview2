@@ -63,13 +63,14 @@ static int WebView_init(WebView *self, PyObject *args, PyObject *kwds)
 	const char *url = NULL;
 	const char *title = NULL;
 	const char *icon = NULL;
+	int bgcolor = 0xFFFFFF;
 
-	static char *kwlist[] = {"debug", "window", "autosize", "width", "height", "url", "title", "icon", NULL};
+	static char *kwlist[] = {"debug", "window", "autosize", "width", "height", "url", "title", "icon", "bgcolor", NULL};
 
 	if (!PyArg_ParseTupleAndKeywords(
 		args,
 		kwds,
-		"|iiiiisss",
+		"|iiiiisssi",
 		kwlist,
 		&debug,
 		&hWndParent,
@@ -78,7 +79,8 @@ static int WebView_init(WebView *self, PyObject *args, PyObject *kwds)
 		&height,
 		&url,
 		&title,
-		&icon
+		&icon,
+		&bgcolor
 	))
 	{
 		return -1;
@@ -92,7 +94,7 @@ static int WebView_init(WebView *self, PyObject *args, PyObject *kwds)
 			SetWindowText(hWndParent, title);
 	}
 
-	self->w = webview_create(debug, (HWND)hWndParent);
+	self->w = webview_create(debug, (HWND)hWndParent, (COLORREF)bgcolor);
 
 	self->hWndWidget = (HWND)webview_get_native_handle(self->w, WEBVIEW_NATIVE_HANDLE_KIND_UI_WIDGET);
 
@@ -137,9 +139,16 @@ static int WebView_init(WebView *self, PyObject *args, PyObject *kwds)
 //##########################################################
 // Runs the main loop until it's terminated.
 //##########################################################
-static PyObject *WebView_run(WebView *self)
+static PyObject *WebView_run(WebView *self, PyObject *args)
 {
-	webview_run(self->w);
+	HWND hWnd = NULL;
+	HACCEL hacc = NULL;
+	if (!PyArg_ParseTuple(args, "|ii", &hWnd, &hacc))
+	{
+		return NULL;
+	}
+
+	webview_run(self->w, hWnd, hacc);
 	Py_RETURN_NONE;
 }
 
@@ -190,23 +199,6 @@ static PyObject *WebView_set_size(WebView *self, PyObject *args)
 
 	Py_RETURN_NONE;
 }
-
-// CUSTOM
-//static PyObject *WebView_resize(WebView *self, PyObject *args)
-//{
-//	int width, height;
-//
-//	if (!PyArg_ParseTuple(args, "ii", &width, &height))
-//	{
-//		return NULL;
-//	}
-//
-//	SetWindowPos(
-//		(HWND)webview_get_native_handle(self->w, WEBVIEW_NATIVE_HANDLE_KIND_UI_WIDGET),
-//		NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-//
-//	Py_RETURN_NONE;
-//}
 
 //##########################################################
 // Activates/deactivates fullscreen mode
@@ -267,53 +259,6 @@ static PyObject *WebView_js_eval(WebView *self, PyObject *args)
 	webview_eval(self->w, js);
 	Py_RETURN_NONE;
 }
-
-/**
- * Schedules a function to be invoked on the thread with the run/event loop.
- *
- * Since library functions generally do not have thread safety guarantees,
- * this function can be used to schedule code to execute on the main/GUI
- * thread and thereby make that execution safe in multi-threaded applications.
- *
- * @param w The webview instance.
- * @param fn The function to be invoked.
- * @param arg An optional argument passed along to the callback function.
- */
-
-//WEBVIEW_API webview_error_t webview_dispatch(webview_t w,
-//	void(*fn)(webview_t w, void *arg),
-//	void *arg);
-//##########################################################
-//
-//##########################################################
-//static void webview_dispatch_cb(struct webview *w, void *arg) {
-//  PyObject *cb = (PyObject *)arg;
-//  /* TODO */
-//
-//  PyObject_CallObject(cb, NULL);
-//
-//  Py_XINCREF(cb);
-//}
-
-//##########################################################
-//
-//##########################################################
-//static PyObject *WebView_js_dispatch(WebView *self, PyObject *args)
-//{
-//	PyObject *func;
-//	if (!PyArg_ParseTuple(args, "O:set_callback", &func))
-//	{
-//		return NULL;
-//	}
-//	if (!PyCallable_Check(func))
-//	{
-//		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-//		return NULL;
-//	}
-//	Py_XINCREF(func);
-//	webview_dispatch(self->w, webview_dispatch_cb, func);
-//	Py_RETURN_NONE;
-//}
 
 //##########################################################
 //
@@ -483,7 +428,7 @@ static PyMethodDef WebView_methods[] =
 	{"js_return", (PyCFunction)WebView_js_return, METH_VARARGS, "..."},
 	{"js_unbind", (PyCFunction)WebView_js_unbind, METH_VARARGS, "..."},
 	{"navigate", (PyCFunction)WebView_navigate, METH_VARARGS, "..."},
-	{"run", (PyCFunction)WebView_run, METH_NOARGS, "..."},
+	{"run", (PyCFunction)WebView_run, METH_VARARGS, "..."},
 	{"set_focus", (PyCFunction)WebView_set_focus, METH_VARARGS, "..."},
 	{"set_fullscreen", (PyCFunction)WebView_set_fullscreen, METH_VARARGS, "..."},
 	{"set_html", (PyCFunction)WebView_set_html, METH_VARARGS, "..."},

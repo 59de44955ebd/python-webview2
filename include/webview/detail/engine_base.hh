@@ -40,6 +40,8 @@
 #include <map>
 #include <string>
 
+#include <windows.h>
+
 namespace webview {
 namespace detail {
 
@@ -132,7 +134,7 @@ window.__webview__.onUnbind(" +
   result<void *> window() { return window_impl(); }
   result<void *> widget() { return widget_impl(); }
   result<void *> browser_controller() { return browser_controller_impl(); }
-  noresult run() { return run_impl(); }
+  noresult run(HWND hWnd, HACCEL hacc) { return run_impl(hWnd, hacc); }
   noresult terminate() { return terminate_impl(); }
   noresult dispatch(std::function<void()> f) { return dispatch_impl(f); }
   noresult set_title(const std::string &title) { return set_title_impl(title); }
@@ -157,7 +159,7 @@ protected:
   virtual result<void *> window_impl() = 0;
   virtual result<void *> widget_impl() = 0;
   virtual result<void *> browser_controller_impl() = 0;
-  virtual noresult run_impl() = 0;
+  virtual noresult run_impl(HWND, HACCEL) = 0;
   virtual noresult terminate_impl() = 0;
   virtual noresult dispatch_impl(std::function<void()> f) = 0;
   virtual noresult set_title_impl(const std::string &title) = 0;
